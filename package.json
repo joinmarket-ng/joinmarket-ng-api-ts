@@ -43,6 +43,7 @@
     "test": "npm run test:ts",
     "test:ts": "tsc --noEmit",
     "build": "tsup",
+    "prepare": "[ -d dist ] || npm run build",
     "openapi-ts:fetch-schema": "wget https://joinmarket-org.github.io/joinmarket-clientserver/api/wallet-rpc.yaml -O ./contrib/jm-wallet-rpc.yaml",
     "openapi-ts": "openapi-ts",
     "example": "npx tsx ./example.ts",
