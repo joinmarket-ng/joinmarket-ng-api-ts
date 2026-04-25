@@ -60,8 +60,8 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> => {
 /**
  * Turns URLSearchParams into a sorted JSON object for deterministic keys.
  */
-const serializeSearchParams = (params: URLSearchParams): JsonValue => {
-  const entries = Array.from(params.entries()).sort(([a], [b]) =>
+const serializeSearchParameters = (parameters: URLSearchParams): JsonValue => {
+  const entries = [...parameters.entries()].sort(([a], [b]) =>
     a.localeCompare(b),
   );
   const result: Record<string, JsonValue> = {};
@@ -125,7 +125,7 @@ export const serializeQueryKeyValue = (
     typeof URLSearchParams !== 'undefined' &&
     value instanceof URLSearchParams
   ) {
-    return serializeSearchParams(value);
+    return serializeSearchParameters(value);
   }
 
   if (isPlainObject(value)) {
