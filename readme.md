@@ -14,10 +14,10 @@ types.
 
 ```shell
 # from npm (after the maintainer has published a release)
-npm install @joinmarket-ng/joinmarket-api-ts
+npm install @joinmarket-ng/joinmarket-ng-api-ts
 
 # or pin to a specific commit on GitHub
-npm install joinmarket-ng/joinmarket-api-ts#<commit-or-tag>
+npm install joinmarket-ng/joinmarket-ng-api-ts#<commit-or-tag>
 ```
 
 ## Getting Started
@@ -35,14 +35,14 @@ npm run example
 The compiled spec is shipped with the package and also published to GitHub
 Pages on every push to `main`:
 
-- JSON: <https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.json>
-- YAML: <https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.yaml>
-- Swagger UI: <https://joinmarket-ng.github.io/joinmarket-api-ts/>
+- JSON: <https://joinmarket-ng.github.io/joinmarket-ng-api-ts/openapi.json>
+- YAML: <https://joinmarket-ng.github.io/joinmarket-ng-api-ts/openapi.yaml>
+- Swagger UI: <https://joinmarket-ng.github.io/joinmarket-ng-api-ts/>
 
 Inside the package, the spec is available via subpath exports:
 
 ```ts
-import spec from '@joinmarket-ng/joinmarket-api-ts/openapi.json' with { type: 'json' }
+import spec from '@joinmarket-ng/joinmarket-ng-api-ts/openapi.json' with { type: 'json' }
 ```
 
 ## License

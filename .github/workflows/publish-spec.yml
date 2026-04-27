@@ -1,16 +1,16 @@
 name: Publish OpenAPI spec
 
 # Publishes the compiled OpenAPI spec (and a Swagger UI viewer) to GitHub Pages
-# on every push to ``main``. This gives downstream consumers - such as the
+# on every push to ``master``. This gives downstream consumers - such as the
 # ``jam`` ``v2-jm-ng-tumbler`` branch - a stable, always-up-to-date URL:
 #
-#   https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.json
-#   https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.yaml
-#   https://joinmarket-ng.github.io/joinmarket-api-ts/  (Swagger UI)
+#   https://joinmarket-ng.github.io/joinmarket-ng-api-ts/openapi.json
+#   https://joinmarket-ng.github.io/joinmarket-ng-api-ts/openapi.yaml
+#   https://joinmarket-ng.github.io/joinmarket-ng-api-ts/  (Swagger UI)
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 permissions:
