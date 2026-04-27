@@ -1,0 +1,74 @@
+name: Publish OpenAPI spec
+
+# Publishes the compiled OpenAPI spec (and a Swagger UI viewer) to GitHub Pages
+# on every push to ``main``. This gives downstream consumers - such as the
+# ``jam`` ``v2-jm-ng-tumbler`` branch - a stable, always-up-to-date URL:
+#
+#   https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.json
+#   https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.yaml
+#   https://joinmarket-ng.github.io/joinmarket-api-ts/  (Swagger UI)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Stage spec + viewer
+        run: |
+          mkdir -p _site
+          cp contrib/jm-ng-openapi.json _site/openapi.json
+          cp contrib/jm-ng-openapi.yaml _site/openapi.yaml
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <title>JoinMarket-NG API</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+            </head>
+            <body>
+              <div id="swagger-ui"></div>
+              <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+              <script>
+                window.ui = SwaggerUIBundle({
+                  url: 'openapi.json',
+                  dom_id: '#swagger-ui',
+                  deepLinking: true,
+                });
+              </script>
+            </body>
+          </html>
+          HTML
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

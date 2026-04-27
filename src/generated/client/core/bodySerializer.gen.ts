@@ -38,7 +38,7 @@ const serializeFormDataPair = (
   }
 };
 
-const serializeUrlSearchParametersPair = (
+const serializeUrlSearchParamsPair = (
   data: URLSearchParams,
   key: string,
   value: unknown,
@@ -89,9 +89,9 @@ export const urlSearchParamsBodySerializer = {
         return;
       }
       if (Array.isArray(value)) {
-        value.forEach((v) => serializeUrlSearchParametersPair(data, key, v));
+        value.forEach((v) => serializeUrlSearchParamsPair(data, key, v));
       } else {
-        serializeUrlSearchParametersPair(data, key, value);
+        serializeUrlSearchParamsPair(data, key, value);
       }
     });
 

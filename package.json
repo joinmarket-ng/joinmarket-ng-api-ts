@@ -1,12 +1,13 @@
 {
-  "name": "@joinmarket-webui/joinmarket-api-ts",
-  "version": "0.3.0",
-  "description": "OpenAPI TypeScript types and client for JoinMarket",
+  "name": "@joinmarket-ng/joinmarket-api-ts",
+  "version": "0.4.0",
+  "description": "OpenAPI TypeScript types and client for JoinMarket-NG (jmwalletd)",
   "license": "MIT",
-  "author": "JoinMarket WebUI Org.",
+  "author": "JoinMarket-NG contributors",
   "type": "module",
   "keywords": [
     "joinmarket",
+    "joinmarket-ng",
     "bitcoin",
     "rpc",
     "api",
@@ -34,29 +35,33 @@
     "./@tanstack/react-query": {
       "import": "./dist/generated/client/@tanstack/react-query.gen.js",
       "types": "./dist/generated/client/@tanstack/react-query.gen.d.ts"
-    }
+    },
+    "./openapi.json": "./contrib/jm-ng-openapi.json",
+    "./openapi.yaml": "./contrib/jm-ng-openapi.yaml"
   },
   "files": [
-    "dist"
+    "dist",
+    "contrib/jm-ng-openapi.json",
+    "contrib/jm-ng-openapi.yaml"
   ],
   "scripts": {
     "test": "npm run test:ts",
     "test:ts": "tsc --noEmit",
     "build": "tsup",
     "prepare": "[ -d dist ] || npm run build",
-    "openapi-ts:fetch-schema": "wget https://joinmarket-org.github.io/joinmarket-clientserver/api/wallet-rpc.yaml -O ./contrib/jm-wallet-rpc.yaml",
+    "openapi-ts:fetch-schema": "node ./scripts/fetch-schema.mjs",
     "openapi-ts": "openapi-ts",
     "example": "npx tsx ./example.ts",
-    "publish:npm": "npm publish --ignore-scripts --access public --@joinmarket-webui:registry=https://registry.npmjs.org",
-    "publish:ghr": "npm publish --ignore-scripts --access public --@joinmarket-webui:registry=https://npm.pkg.github.com"
+    "publish:npm": "npm publish --ignore-scripts --access public --@joinmarket-ng:registry=https://registry.npmjs.org",
+    "publish:ghr": "npm publish --ignore-scripts --access public --@joinmarket-ng:registry=https://npm.pkg.github.com"
   },
-  "homepage": "https://github.com/joinmarket-webui/joinmarket-api-ts",
+  "homepage": "https://github.com/joinmarket-ng/joinmarket-api-ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joinmarket-webui/joinmarket-api-ts.git"
+    "url": "git+https://github.com/joinmarket-ng/joinmarket-api-ts.git"
   },
   "bugs": {
-    "url": "https://github.com/joinmarket-webui/joinmarket-api-ts/issues"
+    "url": "https://github.com/joinmarket-ng/joinmarket-api-ts/issues"
   },
   "publishConfig": {
     "access": "public"
@@ -66,6 +71,7 @@
     "@tanstack/react-query": "5.90.9",
     "@types/node": "24.10.1",
     "@types/react": "19.2.5",
+    "js-yaml": "4.1.0",
     "tsup": "8.5.1",
     "tsx": "4.20.6",
     "typescript": "5.9.3"

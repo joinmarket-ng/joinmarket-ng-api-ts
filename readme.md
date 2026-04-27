@@ -1,32 +1,57 @@
-# joinmarket-api-ts
+# joinmarket-ng-api-ts
+
+OpenAPI TypeScript types and client for [JoinMarket-NG](https://github.com/joinmarket-ng/joinmarket-ng)'s
+`jmwalletd` HTTP/WebSocket API.
+
+This package is a fork of
+[`@joinmarket-webui/joinmarket-api-ts`](https://github.com/joinmarket-webui/joinmarket-api-ts).
+It tracks the JoinMarket-NG OpenAPI spec instead of the joinmarket-clientserver
+reference implementation - in particular, it ships the
+`/api/v1/wallet/{walletname}/tumbler/*` endpoints and FastAPI-shaped error
+types.
+
+## Install
+
+```shell
+# from npm (after the maintainer has published a release)
+npm install @joinmarket-ng/joinmarket-api-ts
+
+# or pin to a specific commit on GitHub
+npm install joinmarket-ng/joinmarket-api-ts#<commit-or-tag>
+```
 
 ## Getting Started
 
 ```shell
 npm install
-npm run openapi-ts:fetch-schema && npm run openapi-ts
+# fetch the spec from a running jmwalletd
+JM_NG_OPENAPI_URL=https://127.0.0.1:28183/openapi.json npm run openapi-ts:fetch-schema
+npm run openapi-ts
 npm run example
 ```
 
-If you have a Jam dev environment running:
+## OpenAPI spec
 
-```shell
-npm run example
+The compiled spec is shipped with the package and also published to GitHub
+Pages on every push to `main`:
+
+- JSON: <https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.json>
+- YAML: <https://joinmarket-ng.github.io/joinmarket-api-ts/openapi.yaml>
+- Swagger UI: <https://joinmarket-ng.github.io/joinmarket-api-ts/>
+
+Inside the package, the spec is available via subpath exports:
+
+```ts
+import spec from '@joinmarket-ng/joinmarket-api-ts/openapi.json' with { type: 'json' }
 ```
-
-## API
-
-Generated from [wallet-rpc.yml](contrib/jm-wallet-rpc.yml).
-Web: https://joinmarket-org.github.io/joinmarket-clientserver/api/index.html
 
 ## License
 
-The project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT - see [LICENSE](LICENSE).
 
 ## Resources
-- JoinMarket: https://github.com/JoinMarket-Org/joinmarket-clientserver
-- Jam: https://github.com/joinmarket-webui/jam
-- Hey API docs: https://heyapi.dev/openapi-ts/get-started
-- @hey-api/openapi-ts (GitHub): https://github.com/hey-api/openapi-ts
-- @hey-api/client-fetch (Docs): https://heyapi.dev/openapi-ts/clients/fetch
-- @tanstack/react-query: https://github.com/TanStack/query
+
+- JoinMarket-NG: <https://github.com/joinmarket-ng/joinmarket-ng>
+- Jam: <https://github.com/joinmarket-webui/jam>
+- Hey API: <https://heyapi.dev/openapi-ts>
+- @tanstack/react-query: <https://github.com/TanStack/query>

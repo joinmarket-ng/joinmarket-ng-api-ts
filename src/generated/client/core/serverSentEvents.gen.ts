@@ -199,7 +199,7 @@ export const createSseClient = <TData = unknown>({
               let data: unknown;
               let parsedJson = false;
 
-              if (dataLines.length > 0) {
+              if (dataLines.length) {
                 const rawData = dataLines.join('\n');
                 try {
                   data = JSON.parse(rawData);
@@ -226,7 +226,7 @@ export const createSseClient = <TData = unknown>({
                 retry: retryDelay,
               });
 
-              if (dataLines.length > 0) {
+              if (dataLines.length) {
                 yield data as any;
               }
             }

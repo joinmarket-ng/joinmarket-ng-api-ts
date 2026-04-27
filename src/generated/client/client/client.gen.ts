@@ -16,10 +16,10 @@ import {
   getParseAs,
   mergeConfigs,
   mergeHeaders,
-  setAuthParams as setAuthParameters,
+  setAuthParams,
 } from './utils.gen';
 
-type RequestInit_ = Omit<RequestInit, 'body' | 'headers'> & {
+type ReqInit = Omit<RequestInit, 'body' | 'headers'> & {
   body?: any;
   headers: ReturnType<typeof mergeHeaders>;
 };
@@ -42,7 +42,7 @@ export const createClient = (config: Config = {}): Client => {
   >();
 
   const beforeRequest = async (options: RequestOptions) => {
-    const options_ = {
+    const opts = {
       ..._config,
       ...options,
       fetch: options.fetch ?? _config.fetch ?? globalThis.fetch,
@@ -50,35 +50,35 @@ export const createClient = (config: Config = {}): Client => {
       serializedBody: undefined,
     };
 
-    if (options_.security) {
-      await setAuthParameters({
-        ...options_,
-        security: options_.security,
+    if (opts.security) {
+      await setAuthParams({
+        ...opts,
+        security: opts.security,
       });
     }
 
-    if (options_.requestValidator) {
-      await options_.requestValidator(options_);
+    if (opts.requestValidator) {
+      await opts.requestValidator(opts);
     }
 
-    if (options_.body !== undefined && options_.bodySerializer) {
-      options_.serializedBody = options_.bodySerializer(options_.body);
+    if (opts.body !== undefined && opts.bodySerializer) {
+      opts.serializedBody = opts.bodySerializer(opts.body);
     }
 
     // remove Content-Type header if body is empty to avoid sending invalid requests
-    if (options_.body === undefined || options_.serializedBody === '') {
-      options_.headers.delete('Content-Type');
+    if (opts.body === undefined || opts.serializedBody === '') {
+      opts.headers.delete('Content-Type');
     }
 
-    const url = buildUrl(options_);
+    const url = buildUrl(opts);
 
-    return { opts: options_, url };
+    return { opts, url };
   };
 
   const request: Client['request'] = async (options) => {
     // @ts-expect-error
     const { opts, url } = await beforeRequest(options);
-    const requestInit: RequestInit_ = {
+    const requestInit: ReqInit = {
       redirect: 'follow',
       ...opts,
       body: getValidRequestBody(opts),
@@ -86,9 +86,9 @@ export const createClient = (config: Config = {}): Client => {
 
     let request = new Request(url, requestInit);
 
-    for (const function_ of interceptors.request.fns) {
-      if (function_) {
-        request = await function_(request, opts);
+    for (const fn of interceptors.request.fns) {
+      if (fn) {
+        request = await fn(request, opts);
       }
     }
 
@@ -103,9 +103,9 @@ export const createClient = (config: Config = {}): Client => {
       // Handle fetch exceptions (AbortError, network errors, etc.)
       let finalError = error;
 
-      for (const function_ of interceptors.error.fns) {
-        if (function_) {
-          finalError = (await function_(
+      for (const fn of interceptors.error.fns) {
+        if (fn) {
+          finalError = (await fn(
             error,
             undefined as any,
             request,
@@ -130,9 +130,9 @@ export const createClient = (config: Config = {}): Client => {
           };
     }
 
-    for (const function_ of interceptors.response.fns) {
-      if (function_) {
-        response = await function_(response, request, opts);
+    for (const fn of interceptors.response.fns) {
+      if (fn) {
+        response = await fn(response, request, opts);
       }
     }
 
@@ -225,9 +225,9 @@ export const createClient = (config: Config = {}): Client => {
     const error = jsonError ?? textError;
     let finalError = error;
 
-    for (const function_ of interceptors.error.fns) {
-      if (function_) {
-        finalError = (await function_(error, response, request, opts)) as string;
+    for (const fn of interceptors.error.fns) {
+      if (fn) {
+        finalError = (await fn(error, response, request, opts)) as string;
       }
     }
 
@@ -260,9 +260,9 @@ export const createClient = (config: Config = {}): Client => {
         method,
         onRequest: async (url, init) => {
           let request = new Request(url, init);
-          for (const function_ of interceptors.request.fns) {
-            if (function_) {
-              request = await function_(request, opts);
+          for (const fn of interceptors.request.fns) {
+            if (fn) {
+              request = await fn(request, opts);
             }
           }
           return request;

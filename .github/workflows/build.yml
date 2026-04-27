@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [master, devel]
+    branches: [main]
   pull_request:
-    branches: [master, devel]
+    branches: [main]
 
 jobs:
   build:
@@ -30,3 +30,13 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Upload built spec + dist as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: joinmarket-ng-api-ts-${{ github.sha }}
+          path: |
+            dist/
+            contrib/jm-ng-openapi.json
+            contrib/jm-ng-openapi.yaml
+          retention-days: 14

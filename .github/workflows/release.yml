@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'v24.11.1'
-          scope: '@joinmarket-webui'
+          scope: '@joinmarket-ng'
 
       - name: Install
         run: npm clean-install
@@ -31,10 +31,23 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish to npm Registry
-        run: npm run publish:npm
-
-      - name: Publish to Github Registry
+      - name: Publish to GitHub Packages
         run: |
           npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
           npm run publish:ghr
+
+      # Optional: Publish to npm Registry. Requires NPM_TOKEN secret.
+      - name: Publish to npm Registry
+        if: ${{ env.NPM_TOKEN != '' }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm run publish:npm
+
+      - name: Attach OpenAPI spec to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            contrib/jm-ng-openapi.json
+            contrib/jm-ng-openapi.yaml

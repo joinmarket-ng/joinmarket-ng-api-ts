@@ -3,9 +3,9 @@
 import type { BodySerializer, QuerySerializer } from './bodySerializer.gen';
 import {
   type ArraySeparatorStyle,
-  serializeArrayParam as serializeArrayParameter,
-  serializeObjectParam as serializeObjectParameter,
-  serializePrimitiveParam as serializePrimitiveParameter,
+  serializeArrayParam,
+  serializeObjectParam,
+  serializePrimitiveParam,
 } from './pathSerializer.gen';
 
 export interface PathSerializer {
@@ -46,7 +46,7 @@ export const defaultPathSerializer = ({ path, url: _url }: PathSerializer) => {
       if (Array.isArray(value)) {
         url = url.replace(
           match,
-          serializeArrayParameter({ explode, name, style, value }),
+          serializeArrayParam({ explode, name, style, value }),
         );
         continue;
       }
@@ -54,7 +54,7 @@ export const defaultPathSerializer = ({ path, url: _url }: PathSerializer) => {
       if (typeof value === 'object') {
         url = url.replace(
           match,
-          serializeObjectParameter({
+          serializeObjectParam({
             explode,
             name,
             style,
@@ -68,7 +68,7 @@ export const defaultPathSerializer = ({ path, url: _url }: PathSerializer) => {
       if (style === 'matrix') {
         url = url.replace(
           match,
-          `;${serializePrimitiveParameter({
+          `;${serializePrimitiveParam({
             name,
             value: value as string,
           })}`,

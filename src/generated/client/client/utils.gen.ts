@@ -4,9 +4,9 @@ import { getAuthToken } from '../core/auth.gen';
 import type { QuerySerializerOptions } from '../core/bodySerializer.gen';
 import { jsonBodySerializer } from '../core/bodySerializer.gen';
 import {
-  serializeArrayParam as serializeArrayParameter,
-  serializeObjectParam as serializeObjectParameter,
-  serializePrimitiveParam as serializePrimitiveParameter,
+  serializeArrayParam,
+  serializeObjectParam,
+  serializePrimitiveParam,
 } from '../core/pathSerializer.gen';
 import { getUrl } from '../core/utils.gen';
 import type { Client, ClientOptions, Config, RequestOptions } from './types.gen';
@@ -15,11 +15,11 @@ export const createQuerySerializer = <T = unknown>({
   parameters = {},
   ...args
 }: QuerySerializerOptions = {}) => {
-  const querySerializer = (queryParameters: T) => {
+  const querySerializer = (queryParams: T) => {
     const search: string[] = [];
-    if (queryParameters && typeof queryParameters === 'object') {
-      for (const name in queryParameters) {
-        const value = queryParameters[name];
+    if (queryParams && typeof queryParams === 'object') {
+      for (const name in queryParams) {
+        const value = queryParams[name];
 
         if (value === undefined || value === null) {
           continue;
@@ -28,7 +28,7 @@ export const createQuerySerializer = <T = unknown>({
         const options = parameters[name] || args;
 
         if (Array.isArray(value)) {
-          const serializedArray = serializeArrayParameter({
+          const serializedArray = serializeArrayParam({
             allowReserved: options.allowReserved,
             explode: true,
             name,
@@ -38,7 +38,7 @@ export const createQuerySerializer = <T = unknown>({
           });
           if (serializedArray) search.push(serializedArray);
         } else if (typeof value === 'object') {
-          const serializedObject = serializeObjectParameter({
+          const serializedObject = serializeObjectParam({
             allowReserved: options.allowReserved,
             explode: true,
             name,
@@ -48,7 +48,7 @@ export const createQuerySerializer = <T = unknown>({
           });
           if (serializedObject) search.push(serializedObject);
         } else {
-          const serializedPrimitive = serializePrimitiveParameter({
+          const serializedPrimitive = serializePrimitiveParam({
             allowReserved: options.allowReserved,
             name,
             value: value as string,
@@ -226,21 +226,21 @@ export const mergeHeaders = (
   return mergedHeaders;
 };
 
-type ErrorInterceptor<Error_, Res, Request_, Options> = (
-  error: Error_,
+type ErrInterceptor<Err, Res, Req, Options> = (
+  error: Err,
   response: Res,
-  request: Request_,
+  request: Req,
   options: Options,
-) => Error_ | Promise<Error_>;
+) => Err | Promise<Err>;
 
-type RequestInterceptor<Request_, Options> = (
-  request: Request_,
+type ReqInterceptor<Req, Options> = (
+  request: Req,
   options: Options,
-) => Request_ | Promise<Request_>;
+) => Req | Promise<Req>;
 
-type ResInterceptor<Res, Request_, Options> = (
+type ResInterceptor<Res, Req, Options> = (
   response: Res,
-  request: Request_,
+  request: Req,
   options: Options,
 ) => Res | Promise<Res>;
 
@@ -272,37 +272,37 @@ class Interceptors<Interceptor> {
 
   update(
     id: number | Interceptor,
-    function_: Interceptor,
+    fn: Interceptor,
   ): number | Interceptor | false {
     const index = this.getInterceptorIndex(id);
     if (this.fns[index]) {
-      this.fns[index] = function_;
+      this.fns[index] = fn;
       return id;
     }
     return false;
   }
 
-  use(function_: Interceptor): number {
-    this.fns.push(function_);
+  use(fn: Interceptor): number {
+    this.fns.push(fn);
     return this.fns.length - 1;
   }
 }
 
-export interface Middleware<Request_, Res, Error_, Options> {
-  error: Interceptors<ErrorInterceptor<Error_, Res, Request_, Options>>;
-  request: Interceptors<RequestInterceptor<Request_, Options>>;
-  response: Interceptors<ResInterceptor<Res, Request_, Options>>;
+export interface Middleware<Req, Res, Err, Options> {
+  error: Interceptors<ErrInterceptor<Err, Res, Req, Options>>;
+  request: Interceptors<ReqInterceptor<Req, Options>>;
+  response: Interceptors<ResInterceptor<Res, Req, Options>>;
 }
 
-export const createInterceptors = <Request_, Res, Error_, Options>(): Middleware<
-  Request_,
+export const createInterceptors = <Req, Res, Err, Options>(): Middleware<
+  Req,
   Res,
-  Error_,
+  Err,
   Options
 > => ({
-  error: new Interceptors<ErrorInterceptor<Error_, Res, Request_, Options>>(),
-  request: new Interceptors<RequestInterceptor<Request_, Options>>(),
-  response: new Interceptors<ResInterceptor<Res, Request_, Options>>(),
+  error: new Interceptors<ErrInterceptor<Err, Res, Req, Options>>(),
+  request: new Interceptors<ReqInterceptor<Req, Options>>(),
+  response: new Interceptors<ResInterceptor<Res, Req, Options>>(),
 });
 
 const defaultQuerySerializer = createQuerySerializer({

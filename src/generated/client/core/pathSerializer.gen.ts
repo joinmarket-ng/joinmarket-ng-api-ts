@@ -23,7 +23,7 @@ type MatrixStyle = 'label' | 'matrix' | 'simple';
 export type ObjectStyle = 'form' | 'deepObject';
 type ObjectSeparatorStyle = ObjectStyle | MatrixStyle;
 
-interface SerializePrimitiveParameter extends SerializePrimitiveOptions {
+interface SerializePrimitiveParam extends SerializePrimitiveOptions {
   value: string;
 }
 
@@ -114,13 +114,13 @@ export const serializePrimitiveParam = ({
   allowReserved,
   name,
   value,
-}: SerializePrimitiveParameter) => {
+}: SerializePrimitiveParam) => {
   if (value === undefined || value === null) {
     return '';
   }
 
   if (typeof value === 'object') {
-    throw new TypeError(
+    throw new Error(
       'Deeply-nested arrays/objects aren’t supported. Provide your own `querySerializer()` to handle these.',
     );
   }

@@ -17,27 +17,27 @@ export type QueryKey<TOptions extends Options> = [
 const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions, infinite?: boolean, tags?: ReadonlyArray<string>): [
     QueryKey<TOptions>[0]
 ] => {
-    const parameters: QueryKey<TOptions>[0] = { _id: id, baseUrl: options?.baseUrl || (options?.client ?? client).getConfig().baseUrl } as QueryKey<TOptions>[0];
+    const params: QueryKey<TOptions>[0] = { _id: id, baseUrl: options?.baseUrl || (options?.client ?? client).getConfig().baseUrl } as QueryKey<TOptions>[0];
     if (infinite) {
-        parameters._infinite = infinite;
+        params._infinite = infinite;
     }
     if (tags) {
-        parameters.tags = tags;
+        params.tags = tags;
     }
     if (options?.body) {
-        parameters.body = options.body;
+        params.body = options.body;
     }
     if (options?.headers) {
-        parameters.headers = options.headers;
+        params.headers = options.headers;
     }
     if (options?.path) {
-        parameters.path = options.path;
+        params.path = options.path;
     }
     if (options?.query) {
-        parameters.query = options.query;
+        params.query = options.query;
     }
     return [
-        parameters
+        params
     ];
 };
 
@@ -111,10 +111,10 @@ export const listwalletsOptions = (options?: Options<ListwalletsData>) => queryO
  */
 export const createwalletMutation = (options?: Partial<Options<CreatewalletData>>): UseMutationOptions<CreatewalletResponse, CreatewalletError, Options<CreatewalletData>> => {
     const mutationOptions: UseMutationOptions<CreatewalletResponse, CreatewalletError, Options<CreatewalletData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await createwallet({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -130,10 +130,10 @@ export const createwalletMutation = (options?: Partial<Options<CreatewalletData>
  */
 export const recoverwalletMutation = (options?: Partial<Options<RecoverwalletData>>): UseMutationOptions<RecoverwalletResponse, RecoverwalletError, Options<RecoverwalletData>> => {
     const mutationOptions: UseMutationOptions<RecoverwalletResponse, RecoverwalletError, Options<RecoverwalletData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await recoverwallet({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -149,10 +149,10 @@ export const recoverwalletMutation = (options?: Partial<Options<RecoverwalletDat
  */
 export const unlockwalletMutation = (options?: Partial<Options<UnlockwalletData>>): UseMutationOptions<UnlockwalletResponse, UnlockwalletError, Options<UnlockwalletData>> => {
     const mutationOptions: UseMutationOptions<UnlockwalletResponse, UnlockwalletError, Options<UnlockwalletData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await unlockwallet({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -188,10 +188,10 @@ export const lockwalletOptions = (options: Options<LockwalletData>) => queryOpti
  */
 export const tokenMutation = (options?: Partial<Options<TokenData>>): UseMutationOptions<TokenResponse2, TokenError, Options<TokenData>> => {
     const mutationOptions: UseMutationOptions<TokenResponse2, TokenError, Options<TokenData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await token({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -309,10 +309,10 @@ export const getseedOptions = (options: Options<GetseedData>) => queryOptions<Ge
  */
 export const freezeMutation = (options?: Partial<Options<FreezeData>>): UseMutationOptions<FreezeResponse, FreezeError, Options<FreezeData>> => {
     const mutationOptions: UseMutationOptions<FreezeResponse, FreezeError, Options<FreezeData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await freeze({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -328,10 +328,10 @@ export const freezeMutation = (options?: Partial<Options<FreezeData>>): UseMutat
  */
 export const configgetMutation = (options?: Partial<Options<ConfiggetData>>): UseMutationOptions<ConfiggetResponse, ConfiggetError, Options<ConfiggetData>> => {
     const mutationOptions: UseMutationOptions<ConfiggetResponse, ConfiggetError, Options<ConfiggetData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await configget({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -347,10 +347,10 @@ export const configgetMutation = (options?: Partial<Options<ConfiggetData>>): Us
  */
 export const configsettingMutation = (options?: Partial<Options<ConfigsettingData>>): UseMutationOptions<ConfigsettingResponse, ConfigsettingError, Options<ConfigsettingData>> => {
     const mutationOptions: UseMutationOptions<ConfigsettingResponse, ConfigsettingError, Options<ConfigsettingData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await configsetting({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -406,10 +406,10 @@ export const getrescaninfoOptions = (options: Options<GetrescaninfoData>) => que
  */
 export const signmessageMutation = (options?: Partial<Options<SignmessageData>>): UseMutationOptions<SignmessageResponse, SignmessageError, Options<SignmessageData>> => {
     const mutationOptions: UseMutationOptions<SignmessageResponse, SignmessageError, Options<SignmessageData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await signmessage({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -445,10 +445,10 @@ export const yieldgenreportOptions = (options?: Options<YieldgenreportData>) => 
  */
 export const directsendMutation = (options?: Partial<Options<DirectsendData>>): UseMutationOptions<DirectsendResponse, DirectsendError, Options<DirectsendData>> => {
     const mutationOptions: UseMutationOptions<DirectsendResponse, DirectsendError, Options<DirectsendData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await directsend({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -464,10 +464,10 @@ export const directsendMutation = (options?: Partial<Options<DirectsendData>>): 
  */
 export const docoinjoinMutation = (options?: Partial<Options<DocoinjoinData>>): UseMutationOptions<unknown, DocoinjoinError, Options<DocoinjoinData>> => {
     const mutationOptions: UseMutationOptions<unknown, DocoinjoinError, Options<DocoinjoinData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await docoinjoin({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -503,10 +503,10 @@ export const stopcoinjoinOptions = (options: Options<StopcoinjoinData>) => query
  */
 export const startmakerMutation = (options?: Partial<Options<StartmakerData>>): UseMutationOptions<unknown, StartmakerError, Options<StartmakerData>> => {
     const mutationOptions: UseMutationOptions<unknown, StartmakerError, Options<StartmakerData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await startmaker({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -542,10 +542,10 @@ export const stopmakerOptions = (options: Options<StopmakerData>) => queryOption
  */
 export const tumblerplandeleteMutation = (options?: Partial<Options<TumblerplandeleteData>>): UseMutationOptions<TumblerplandeleteResponse, TumblerplandeleteError, Options<TumblerplandeleteData>> => {
     const mutationOptions: UseMutationOptions<TumblerplandeleteResponse, TumblerplandeleteError, Options<TumblerplandeleteData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await tumblerplandelete({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -567,10 +567,10 @@ export const tumblerplandeleteMutation = (options?: Partial<Options<Tumblerpland
  */
 export const tumblerplanMutation = (options?: Partial<Options<TumblerplanData>>): UseMutationOptions<TumblerplanResponse, TumblerplanError, Options<TumblerplanData>> => {
     const mutationOptions: UseMutationOptions<TumblerplanResponse, TumblerplanError, Options<TumblerplanData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await tumblerplan({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -610,10 +610,10 @@ export const tumblerstatusOptions = (options: Options<TumblerstatusData>) => que
  */
 export const tumblerstartMutation = (options?: Partial<Options<TumblerstartData>>): UseMutationOptions<unknown, TumblerstartError, Options<TumblerstartData>> => {
     const mutationOptions: UseMutationOptions<unknown, TumblerstartError, Options<TumblerstartData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await tumblerstart({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -629,10 +629,10 @@ export const tumblerstartMutation = (options?: Partial<Options<TumblerstartData>
  */
 export const tumblerstopMutation = (options?: Partial<Options<TumblerstopData>>): UseMutationOptions<unknown, TumblerstopError, Options<TumblerstopData>> => {
     const mutationOptions: UseMutationOptions<unknown, TumblerstopError, Options<TumblerstopData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await tumblerstop({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -688,10 +688,10 @@ export const refreshOrderbookGetApiV1ObwatchRefreshorderbookGetOptions = (option
  */
 export const refreshOrderbookPostApiV1ObwatchRefreshorderbookPostMutation = (options?: Partial<Options<RefreshOrderbookPostApiV1ObwatchRefreshorderbookPostData>>): UseMutationOptions<unknown, DefaultError, Options<RefreshOrderbookPostApiV1ObwatchRefreshorderbookPostData>> => {
     const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<RefreshOrderbookPostApiV1ObwatchRefreshorderbookPostData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await refreshOrderbookPostApiV1ObwatchRefreshorderbookPost({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
@@ -747,10 +747,10 @@ export const refreshOrderbookGetObwatchRefreshorderbookGetOptions = (options?: O
  */
 export const refreshOrderbookPostObwatchRefreshorderbookPostMutation = (options?: Partial<Options<RefreshOrderbookPostObwatchRefreshorderbookPostData>>): UseMutationOptions<unknown, DefaultError, Options<RefreshOrderbookPostObwatchRefreshorderbookPostData>> => {
     const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<RefreshOrderbookPostObwatchRefreshorderbookPostData>> = {
-        mutationFn: async (functionOptions) => {
+        mutationFn: async (fnOptions) => {
             const { data } = await refreshOrderbookPostObwatchRefreshorderbookPost({
                 ...options,
-                ...functionOptions,
+                ...fnOptions,
                 throwOnError: true
             });
             return data;
